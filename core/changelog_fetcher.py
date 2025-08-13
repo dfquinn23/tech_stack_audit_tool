@@ -26,7 +26,7 @@ def fetch_mock_changelog(tool_name):
                 "description": "Improved NLP-based query suggestions and portfolio tagging."}
         ],
 
-        "Factset": [
+        "FactSet": [
             {"date": "2025-2-12", "title": "New ESG Scoring Model",
                 "description": "Added detailed ESG metrics sourced from new global dataset."}
         ],
