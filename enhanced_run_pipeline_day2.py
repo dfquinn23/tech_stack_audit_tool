@@ -4,6 +4,7 @@ Enhanced pipeline with Day 2 Integration Assessment components integrated
 This version systematically handles Stage 2 (Assessment) with zero repetition
 """
 
+from pydantic import Field
 import os
 import sys
 import asyncio
@@ -93,14 +94,22 @@ class EnhancedAuditStateTool(BaseTool):
     name: str = "Enhanced Audit State Manager"
     description: str = "Access audit state, integration assessments, and gap analysis across pipeline stages"
 
+    # Declare these as Pydantic fields but exclude them from serialization
+    stage_manager: StageGateManager = Field(default=None, exclude=True)
+    health_checker: IntegrationHealthChecker = Field(
+        default=None, exclude=True)
+    gap_analyzer: IntegrationGapAnalyzer = Field(default=None, exclude=True)
+
     def __init__(self, stage_manager: StageGateManager,
                  health_checker: IntegrationHealthChecker = None,
-                 gap_analyzer: IntegrationGapAnalyzer = None):
-        super().__init__()
-        # Store as instance variables instead of trying to use field declarations
-        self.stage_manager = stage_manager
-        self.health_checker = health_checker or IntegrationHealthChecker()
-        self.gap_analyzer = gap_analyzer or IntegrationGapAnalyzer()
+                 gap_analyzer: IntegrationGapAnalyzer = None, **kwargs):
+        # Initialize with the field values
+        super().__init__(
+            stage_manager=stage_manager,
+            health_checker=health_checker or IntegrationHealthChecker(),
+            gap_analyzer=gap_analyzer or IntegrationGapAnalyzer(),
+            **kwargs
+        )
 
     def _run(self, action: str, **kwargs) -> str:
         """
