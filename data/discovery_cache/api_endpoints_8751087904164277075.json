@@ -1,0 +1,11 @@
+{
+  "cached_at": "2025-09-16T12:59:01.184445",
+  "data": {
+    "Zoom": {
+      "status_code": 404,
+      "discovery_method": "api_probe",
+      "api_endpoint": "https://api.zoom.us/v2/",
+      "status": "unreachable"
+    }
+  }
+}

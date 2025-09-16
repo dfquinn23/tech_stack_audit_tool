@@ -98,9 +98,9 @@ class EnhancedAuditStateTool(BaseTool):
                  gap_analyzer: IntegrationGapAnalyzer = None):
         super().__init__()
         # Store as instance variables instead of trying to use field declarations
-        self._stage_manager = stage_manager
-        self._health_checker = health_checker or IntegrationHealthChecker()
-        self._gap_analyzer = gap_analyzer or IntegrationGapAnalyzer()
+        self.stage_manager = stage_manager
+        self.health_checker = health_checker or IntegrationHealthChecker()
+        self.gap_analyzer = gap_analyzer or IntegrationGapAnalyzer()
 
     def _run(self, action: str, **kwargs) -> str:
         """
@@ -114,10 +114,10 @@ class EnhancedAuditStateTool(BaseTool):
         """
         try:
             if action == "get_inventory":
-                return str(self._stage_manager.state.tool_inventory)
+                return str(self.stage_manager.state.tool_inventory)
 
             elif action == "get_integration_health":
-                integrations = self._stage_manager.state.integrations
+                integrations = self.stage_manager.state.integrations
                 if not integrations:
                     return "No integration assessments available yet"
 
@@ -133,7 +133,7 @@ class EnhancedAuditStateTool(BaseTool):
             elif action == "get_gap_analysis":
                 # This would be populated during assessment stage
                 gap_data = getattr(
-                    self._stage_manager.state, 'gap_analysis', {})
+                    self.stage_manager.state, 'gap_analysis', {})
                 if not gap_data:
                     return "Gap analysis not yet performed"
                 return str(gap_data)
@@ -141,7 +141,7 @@ class EnhancedAuditStateTool(BaseTool):
             elif action == "add_integration_assessment":
                 integration_data = kwargs.get("integration_data", {})
                 if integration_data:
-                    self._stage_manager.add_integration(integration_data)
+                    self.stage_manager.add_integration(integration_data)
                     return f"Added integration assessment: {integration_data.get('source_tool')} → {integration_data.get('target_tool')}"
                 return "No integration data provided"
 
@@ -153,12 +153,12 @@ class EnhancedAuditStateTool(BaseTool):
             elif action == "get_priority_gaps":
                 # Return prioritized integration gaps
                 gap_data = getattr(
-                    self._stage_manager.state, 'gap_analysis', {})
+                    self.stage_manager.state, 'gap_analysis', {})
                 priority_gaps = gap_data.get('prioritized_gaps', [])
                 return str(priority_gaps[:5])  # Top 5 priority gaps
 
             elif action == "get_firm_tools":
-                return str(list(self._stage_manager.state.tool_inventory.keys()))
+                return str(list(self.stage_manager.state.tool_inventory.keys()))
 
             else:
                 return f"Unknown action: {action}. Available actions: get_inventory, get_integration_health, get_gap_analysis, add_integration_assessment, get_priority_gaps, get_firm_tools"
@@ -185,27 +185,27 @@ class EnhancedAuditPipelineDay2:
 
         # Initialize assessment components
         self.discovery_engine = DiscoveryEngine()
-        self._health_checker = IntegrationHealthChecker()
-        self._gap_analyzer = IntegrationGapAnalyzer()
+        self.health_checker = IntegrationHealthChecker()
+        self.gap_analyzer = IntegrationGapAnalyzer()
 
         # Create enhanced audit state tool for agents
         self.audit_tool = EnhancedAuditStateTool(
             self.stage_manager,
-            self._health_checker,
-            self._gap_analyzer
+            self.health_checker,
+            self.gap_analyzer
         )
 
         print(f"🚀 Initialized Enhanced Audit Pipeline (Day 2)")
-        print(f"   Audit ID: {self._stage_manager.audit_id}")
-        print(f"   Client: {self._stage_manager.state.client_name}")
+        print(f"   Audit ID: {self.stage_manager.audit_id}")
+        print(f"   Client: {self.stage_manager.state.client_name}")
         print(
-            f"   Current Stage: {self._stage_manager.state.current_stage.name}")
+            f"   Current Stage: {self.stage_manager.state.current_stage.name}")
 
     async def execute_discovery_stage(self, csv_path: Optional[str] = None,
                                       enable_auto_discovery: bool = True) -> bool:
         """Stage 1: Discovery with automated enhancement"""
 
-        if self._stage_manager.state.current_stage != AuditStage.DISCOVERY:
+        if self.stage_manager.state.current_stage != AuditStage.DISCOVERY:
             print("⚠️ Not in Discovery stage. Use advance_to_stage() to navigate.")
             return False
 
@@ -233,18 +233,18 @@ class EnhancedAuditPipelineDay2:
                 self.stage_manager.add_tool(tool_name, tool_data)
 
         # Enhanced discovery with automation
-        if enable_auto_discovery and self._stage_manager.state.client_domain:
+        if enable_auto_discovery and self.stage_manager.state.client_domain:
             print(
-                f"🤖 Running automated discovery for {self._stage_manager.state.client_domain}")
+                f"🤖 Running automated discovery for {self.stage_manager.state.client_domain}")
 
-            current_tools = self._stage_manager.state.tool_inventory
+            current_tools = self.stage_manager.state.tool_inventory
             enhanced_tools, discovery_summary = await enhance_existing_inventory(
                 current_tools,
-                self._stage_manager.state.client_domain
+                self.stage_manager.state.client_domain
             )
 
             # Update with enhanced data
-            self._stage_manager.state.tool_inventory = enhanced_tools
+            self.stage_manager.state.tool_inventory = enhanced_tools
             self.stage_manager.save_state()
 
             print(f"✅ Discovery complete:")
@@ -259,7 +259,7 @@ class EnhancedAuditPipelineDay2:
 
         if can_advance:
             print(
-                f"\n✅ Stage 1 Gate Passed: {len(self._stage_manager.state.tool_inventory)} tools catalogued")
+                f"\n✅ Stage 1 Gate Passed: {len(self.stage_manager.state.tool_inventory)} tools catalogued")
             return True
         else:
             print(f"\n❌ Stage 1 Gate Failed:")
@@ -270,7 +270,7 @@ class EnhancedAuditPipelineDay2:
     async def execute_assessment_stage_enhanced(self) -> bool:
         """Stage 2: Enhanced Assessment with systematic integration analysis"""
 
-        if self._stage_manager.state.current_stage != AuditStage.ASSESSMENT:
+        if self.stage_manager.state.current_stage != AuditStage.ASSESSMENT:
             print("⚠️ Not in Assessment stage. Complete Discovery first.")
             return False
 
@@ -282,7 +282,7 @@ class EnhancedAuditPipelineDay2:
         print("🔍 Step 1: Comprehensive Integration Health Assessment...")
 
         assessments, health_summary = await assess_tool_stack_integrations(
-            self._stage_manager.state.tool_inventory
+            self.stage_manager.state.tool_inventory
         )
 
         print(f"✅ Health assessment completed:")
@@ -315,11 +315,11 @@ class EnhancedAuditPipelineDay2:
             current_integrations.append(integration_data)
 
             # Add to stage manager
-            self._stage_manager.add_integration(integration_data)
+            self.stage_manager.add_integration(integration_data)
 
         # Run systematic gap analysis
         process_analyses, gap_report = analyze_integration_gaps(
-            self._stage_manager.state.tool_inventory,
+            self.stage_manager.state.tool_inventory,
             current_integrations
         )
 
@@ -332,7 +332,7 @@ class EnhancedAuditPipelineDay2:
             f"   • Estimated annual value: ${gap_report['analysis_summary']['total_estimated_annual_value']:,}")
 
         # Store gap analysis in stage manager state
-        self._stage_manager.state.__dict__['gap_analysis'] = gap_report
+        self.stage_manager.state.__dict__['gap_analysis'] = gap_report
         self.stage_manager.save_state()
 
         # Validate Stage 2 gate
@@ -356,7 +356,7 @@ class EnhancedAuditPipelineDay2:
     async def execute_opportunities_stage_enhanced(self) -> bool:
         """Stage 3: Enhanced Opportunities with gap-driven automation identification"""
 
-        if self._stage_manager.state.current_stage != AuditStage.OPPORTUNITIES:
+        if self.stage_manager.state.current_stage != AuditStage.OPPORTUNITIES:
             print("⚠️ Not in Opportunities stage. Complete Assessment first.")
             return False
 
@@ -368,7 +368,7 @@ class EnhancedAuditPipelineDay2:
         from core.automation_opportunity_engine import generate_automation_opportunities
 
         # Get gap analysis data from previous stage
-        gap_analysis = getattr(self._stage_manager.state, 'gap_analysis', {})
+        gap_analysis = getattr(self.stage_manager.state, 'gap_analysis', {})
         if not gap_analysis:
             print("⚠️ No gap analysis data available. Re-run Stage 2.")
             return False
@@ -377,9 +377,9 @@ class EnhancedAuditPipelineDay2:
         integration_gaps = gap_analysis.get('prioritized_gaps', [])
 
         opportunities, roadmap = generate_automation_opportunities(
-            self._stage_manager.state.tool_inventory,
+            self.stage_manager.state.tool_inventory,
             integration_gaps,
-            self._stage_manager.state.integrations
+            self.stage_manager.state.integrations
         )
 
         print(f"✅ Automation opportunities generated:")
@@ -421,7 +421,7 @@ class EnhancedAuditPipelineDay2:
     async def execute_delivery_stage_enhanced(self) -> bool:
         """Stage 4: Enhanced Delivery with comprehensive assessment reporting"""
 
-        if self._stage_manager.state.current_stage != AuditStage.DELIVERY:
+        if self.stage_manager.state.current_stage != AuditStage.DELIVERY:
             print("⚠️ Not in Delivery stage. Complete Opportunities first.")
             return False
 
@@ -435,25 +435,25 @@ class EnhancedAuditPipelineDay2:
 
         timestamp = datetime.now().strftime("%Y%m%d_%H%M")
         report_file = output_dir / \
-            f"enhanced_audit_report_{self._stage_manager.audit_id}_{timestamp}.md"
+            f"enhanced_audit_report_{self.stage_manager.audit_id}_{timestamp}.md"
 
         # Get gap analysis data
-        gap_analysis = getattr(self._stage_manager.state, 'gap_analysis', {})
+        gap_analysis = getattr(self.stage_manager.state, 'gap_analysis', {})
 
         # Generate comprehensive report
         report_content = f"""# Enhanced Tech Stack Audit Report
 
-_Client: {self._stage_manager.state.client_name}_
+_Client: {self.stage_manager.state.client_name}_
 _Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}_
-_Audit ID: {self._stage_manager.audit_id}_
+_Audit ID: {self.stage_manager.audit_id}_
 
 ## Executive Summary
 
 **Key Findings:**
-- **Tools Assessed:** {len(self._stage_manager.state.tool_inventory)}
-- **Integrations Analyzed:** {len(self._stage_manager.state.integrations)}
+- **Tools Assessed:** {len(self.stage_manager.state.tool_inventory)}
+- **Integrations Analyzed:** {len(self.stage_manager.state.integrations)}
 - **Gaps Identified:** {gap_analysis.get('analysis_summary', {}).get('total_gaps_identified', 0)}
-- **Automation Opportunities:** {len(self._stage_manager.state.automation_opportunities)}
+- **Automation Opportunities:** {len(self.stage_manager.state.automation_opportunities)}
 - **Estimated Annual Value:** ${gap_analysis.get('analysis_summary', {}).get('total_estimated_annual_value', 0):,}
 - **Time Savings Potential:** {gap_analysis.get('analysis_summary', {}).get('total_annual_time_savings_hours', 0):,} hours/year
 
@@ -464,7 +464,7 @@ The following tools were identified in your technology stack:
 """
 
         # Add tool details
-        for tool_name, tool_data in self._stage_manager.state.tool_inventory.items():
+        for tool_name, tool_data in self.stage_manager.state.tool_inventory.items():
             report_content += f"### {tool_name}\n"
             report_content += f"- **Category:** {tool_data.get('category', 'Unknown')}\n"
             report_content += f"- **Users:** {', '.join(tool_data.get('users', ['Unknown']))}\n"
@@ -475,18 +475,18 @@ The following tools were identified in your technology stack:
         report_content += f"""## Integration Assessment
 
 **Summary:**
-- Total integrations assessed: {len(self._stage_manager.state.integrations)}
+- Total integrations assessed: {len(self.stage_manager.state.integrations)}
 - Integration gaps identified: {gap_analysis.get('analysis_summary', {}).get('total_gaps_identified', 0)}
 - High priority gaps: {gap_analysis.get('analysis_summary', {}).get('high_priority_gaps', 0)}
 
 ## Automation Opportunities
 
-We identified {len(self._stage_manager.state.automation_opportunities)} automation opportunities:
+We identified {len(self.stage_manager.state.automation_opportunities)} automation opportunities:
 
 """
 
         # Add opportunities
-        for i, opp in enumerate(self._stage_manager.state.automation_opportunities, 1):
+        for i, opp in enumerate(self.stage_manager.state.automation_opportunities, 1):
             report_content += f"{i}. **{opp.get('name', 'Unknown Opportunity')}**\n"
             report_content += f"   - Priority Score: {opp.get('priority_score', 0)}\n"
             report_content += f"   - Estimated Annual Savings: ${opp.get('roi_estimate', 0):,}\n"
@@ -502,7 +502,7 @@ This report was generated using a systematic Stage-Gate audit methodology with:
 - Template-based automation opportunity identification
 - Data-driven ROI estimation
 
-For questions about this assessment, contact the audit team with reference ID: {self._stage_manager.audit_id}
+For questions about this assessment, contact the audit team with reference ID: {self.stage_manager.audit_id}
 """
 
         # Save report
@@ -512,7 +512,7 @@ For questions about this assessment, contact the audit team with reference ID: {
         print(f"📄 Enhanced report generated: {report_file}")
 
         # Mark delivery complete
-        self._stage_manager.state.stage_completion[4] = True
+        self.stage_manager.state.stage_completion[4] = True
         self.stage_manager.save_state()
 
         print(f"✅ Stage 4 Complete: Enhanced audit delivered")
@@ -522,8 +522,8 @@ For questions about this assessment, contact the audit team with reference ID: {
         """Run the complete enhanced audit pipeline"""
 
         print(f"🚀 Starting Complete Enhanced Audit Pipeline")
-        print(f"   Client: {self._stage_manager.state.client_name}")
-        print(f"   Audit ID: {self._stage_manager.audit_id}")
+        print(f"   Client: {self.stage_manager.state.client_name}")
+        print(f"   Audit ID: {self.stage_manager.audit_id}")
 
         # Stage 1: Discovery
         success = await self.execute_discovery_stage(csv_path, enable_auto_discovery=True)
@@ -555,7 +555,7 @@ For questions about this assessment, contact the audit team with reference ID: {
             # Get final summary
             summary = self.stage_manager.export_summary()
             gap_analysis = getattr(
-                self._stage_manager.state, 'gap_analysis', {})
+                self.stage_manager.state, 'gap_analysis', {})
 
             print(f"\n📊 Enhanced Final Results:")
             print(
