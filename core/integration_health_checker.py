@@ -7,6 +7,7 @@ Eliminates guesswork in understanding how tools connect and where improvements a
 import asyncio
 import aiohttp
 import json
+import re
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Any
 from pathlib import Path
@@ -49,6 +50,14 @@ class IntegrationAssessment:
     issues_found: List[str]
     recommendations: List[str]
     assessment_timestamp: datetime
+
+
+def safe_enum_to_string(enum_obj):
+    """Safely convert enum to string, handling both enum objects and strings"""
+    if hasattr(enum_obj, 'value'):
+        return enum_obj.value
+    else:
+        return str(enum_obj)
 
 
 class IntegrationHealthChecker:
@@ -151,6 +160,21 @@ class IntegrationHealthChecker:
         norm2 = self._normalize_tool_name(tool2)
         return tuple(sorted([norm1, norm2]))
 
+    def _sanitize_filename(self, filename: str) -> str:
+        """Sanitize filename for cross-platform compatibility"""
+        # Replace invalid characters with safe alternatives
+        filename = re.sub(r'[<>:"/\\|?*]', '_', filename)
+        # Replace https:// and http://
+        filename = re.sub(r'https?://', '', filename)
+        # Replace multiple underscores with single
+        filename = re.sub(r'_+', '_', filename)
+        # Remove leading/trailing underscores and dots
+        filename = filename.strip('_.')
+        # Limit length to avoid filesystem limits
+        if len(filename) > 100:
+            filename = filename[:100]
+        return filename
+
     async def assess_integration_health(self, source_tool: str, target_tool: str,
                                         current_integration_data: Optional[Dict] = None) -> IntegrationAssessment:
         """Assess the health of a specific integration"""
@@ -199,14 +223,15 @@ class IntegrationHealthChecker:
                 assessment.issues_found.append(
                     "Expected integration not found")
                 assessment.recommendations.append(
-                    f"Implement {expected_pattern['expected_type'].value} integration")
+                    f"Implement {safe_enum_to_string(expected_pattern['expected_type'])} integration")
             else:
                 assessment.status = IntegrationStatus.UNKNOWN
                 assessment.issues_found.append(
                     "No integration pattern defined")
 
-        # Perform API health checks where possible
-        await self._perform_api_health_checks(assessment)
+        # Perform API health checks where possible (TEMPORARILY DISABLED FOR DEBUGGING)
+        # await self._perform_api_health_checks(assessment)
+        print(f"   🔧 Skipping API health checks for debugging")
 
         # Calculate overall health score
         assessment.health_score = self._calculate_health_score(assessment)
@@ -215,11 +240,12 @@ class IntegrationHealthChecker:
         assessment.recommendations.extend(
             self._generate_recommendations(assessment, expected_pattern))
 
-        # Cache the result
-        self._save_cache(cache_key, assessment.__dict__)
+        # Cache the result (TEMPORARILY DISABLED FOR DEBUGGING)
+        # self._save_cache(cache_key, assessment.__dict__)
+        print(f"   🔧 Skipping cache save for debugging")
 
         print(
-            f"   Status: {assessment.status.value}, Health Score: {assessment.health_score}/100")
+            f"   Status: {safe_enum_to_string(assessment.status)}, Health Score: {assessment.health_score}/100")
 
         return assessment
 
@@ -359,7 +385,7 @@ class IntegrationHealthChecker:
 
         if assessment.status == IntegrationStatus.MISSING and expected_pattern:
             recommendations.append(
-                f"Implement {expected_pattern['expected_type'].value} integration between {assessment.source_tool} and {assessment.target_tool}")
+                f"Implement {safe_enum_to_string(expected_pattern['expected_type'])} integration between {assessment.source_tool} and {assessment.target_tool}")
             recommendations.append(
                 f"Expected business value: Improved {expected_pattern['data_flow']} data flow")
 
@@ -442,12 +468,24 @@ class IntegrationHealthChecker:
 
         total = len(assessments)
         if total == 0:
-            return {"error": "No assessments to summarize"}
+            return {
+                "error": "No assessments to summarize",
+                "summary_timestamp": datetime.now().isoformat(),
+                "total_integrations_assessed": 0,
+                "average_health_score": 0,
+                "status_distribution": {},
+                "criticality_distribution": {},
+                "top_issues": [],
+                "critical_integrations_needing_attention": [],
+                "healthy_integrations": 0,
+                "missing_integrations": 0,
+                "broken_integrations": 0
+            }
 
         # Status distribution
         status_counts = {}
         for assessment in assessments.values():
-            status = assessment.status.value
+            status = safe_enum_to_string(assessment.status)
             status_counts[status] = status_counts.get(status, 0) + 1
 
         # Health score distribution
@@ -475,7 +513,7 @@ class IntegrationHealthChecker:
         # Critical integrations needing attention
         critical_issues = [
             {"integration": key, "health_score": assessment.health_score,
-                "status": assessment.status.value}
+                "status": safe_enum_to_string(assessment.status)}
             for key, assessment in assessments.items()
             if assessment.business_criticality == "high" and assessment.health_score < 70
         ]
@@ -496,7 +534,8 @@ class IntegrationHealthChecker:
 
     def _load_cache(self, cache_key: str) -> Optional[Dict]:
         """Load cached assessment if still valid"""
-        cache_file = self.cache_dir / f"{cache_key}.json"
+        sanitized_key = self._sanitize_filename(cache_key)
+        cache_file = self.cache_dir / f"{sanitized_key}.json"
         if cache_file.exists():
             try:
                 with open(cache_file, 'r') as f:
@@ -511,13 +550,31 @@ class IntegrationHealthChecker:
 
     def _save_cache(self, cache_key: str, assessment_dict: Dict):
         """Save assessment to cache"""
+        # Convert datetime objects to strings for JSON serialization
+        serializable_dict = {}
+        for key, value in assessment_dict.items():
+            if hasattr(value, 'isoformat'):  # datetime object
+                serializable_dict[key] = value.isoformat()
+            elif isinstance(value, list):
+                # Handle lists that might contain non-serializable objects
+                serializable_dict[key] = [str(item) if hasattr(
+                    item, '__dict__') else item for item in value]
+            elif hasattr(value, 'value'):  # enum object
+                serializable_dict[key] = value.value
+            else:
+                serializable_dict[key] = value
+
         cache_data = {
             'cached_at': datetime.now().isoformat(),
-            'assessment': assessment_dict
+            'assessment': serializable_dict
         }
-        cache_file = self.cache_dir / f"{cache_key}.json"
-        with open(cache_file, 'w') as f:
-            json.dump(cache_data, f, indent=2, default=str)
+        sanitized_key = self._sanitize_filename(cache_key)
+        cache_file = self.cache_dir / f"{sanitized_key}.json"
+        try:
+            with open(cache_file, 'w') as f:
+                json.dump(cache_data, f, indent=2, default=str)
+        except Exception as e:
+            print(f"   ⚠️ Cache save failed for {cache_key}: {e}")
 
 # Convenience functions for quick usage
 

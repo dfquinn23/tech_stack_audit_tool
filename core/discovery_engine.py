@@ -89,6 +89,25 @@ class DiscoveryEngine:
             'vpn', 'remote', 'rdp', 'ssh'  # Remote access
         ]
     
+    def _normalize_domain(self, domain: str) -> str:
+        """Normalize domain input to just the domain name"""
+        if not domain:
+            return domain
+            
+        # Remove protocol if present
+        domain = re.sub(r'^https?://', '', domain)
+        
+        # Remove www. if present
+        domain = re.sub(r'^www\.', '', domain)
+        
+        # Remove trailing slashes
+        domain = domain.rstrip('/')
+        
+        # Remove any path components
+        domain = domain.split('/')[0]
+        
+        return domain.lower().strip()
+
     def _get_cache_file(self, cache_key: str) -> Path:
         """Get cache file path for a given key"""
         return self.cache_dir / f"{cache_key}.json"
@@ -130,7 +149,7 @@ class DiscoveryEngine:
     
     async def discover_domain_footprint(self, domain: str) -> Dict[str, Any]:
         """Discover SaaS tools by analyzing domain DNS records and patterns"""
-        cache_key = f"domain_footprint_{domain}"
+        cache_key = f"domain_footprint_{domain.replace('.', '_')}"
         cached_result = self._load_cache(cache_key)
         if cached_result:
             print(f"📋 Using cached domain footprint for {domain}")

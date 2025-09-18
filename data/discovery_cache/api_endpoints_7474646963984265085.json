@@ -1,0 +1,17 @@
+{
+  "cached_at": "2025-09-18T15:14:58.545735",
+  "data": {
+    "Venn": {
+      "status_code": 404,
+      "discovery_method": "api_probe",
+      "api_endpoint": "https://api.zoom.us/v2/",
+      "status": "unreachable"
+    },
+    "Citrix": {
+      "status_code": 200,
+      "discovery_method": "api_probe",
+      "api_endpoint": "https://graph.microsoft.com/v1.0/",
+      "status": "active"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "cached_at": "2025-09-18T14:11:01.109806",
+  "data": {
+    "email": {
+      "tool": "google_workspace",
+      "provider": "Google Workspace",
+      "mx_record": "alt4.aspmx.l.google.com.",
+      "category": "Email/Productivity",
+      "discovery_method": "mx_record"
+    }
+  }
+}

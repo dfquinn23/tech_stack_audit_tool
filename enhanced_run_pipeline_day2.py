@@ -296,13 +296,13 @@ class EnhancedAuditPipelineDay2:
 
         print(f"✅ Health assessment completed:")
         print(
-            f"   • Total integrations assessed: {health_summary['total_integrations_assessed']}")
+            f"   • Total integrations assessed: {health_summary.get('total_integrations_assessed', 0)}")
         print(
-            f"   • Average health score: {health_summary['average_health_score']}/100")
+            f"   • Average health score: {health_summary.get('average_health_score', 0)}/100")
         print(
-            f"   • Missing integrations: {health_summary['missing_integrations']}")
+            f"   • Missing integrations: {health_summary.get('missing_integrations', 0)}")
         print(
-            f"   • Broken integrations: {health_summary['broken_integrations']}")
+            f"   • Broken integrations: {health_summary.get('broken_integrations', 0)}")
 
         # Step 2: Integration Gap Analysis
         print("\n🔍 Step 2: Business Process Integration Gap Analysis...")
@@ -313,8 +313,8 @@ class EnhancedAuditPipelineDay2:
             integration_data = {
                 "source_tool": assessment.source_tool,
                 "target_tool": assessment.target_tool,
-                "status": assessment.status.value,
-                "integration_type": assessment.integration_type.value,
+                "status": str(assessment.status),
+                "integration_type": str(assessment.integration_type),
                 "health_score": assessment.health_score,
                 "business_criticality": assessment.business_criticality,
                 "issues_found": assessment.issues_found,

@@ -1,0 +1,1547 @@
+{
+  "client_name": "CGA",
+  "audit_id": "audit_baab45c1",
+  "current_stage": 3,
+  "stage_completion": {
+    "1": true,
+    "2": true,
+    "3": false,
+    "4": false
+  },
+  "tool_inventory": {
+    "Venn": {
+      "category": "Operations",
+      "users": [
+        "Portfolio Management"
+      ],
+      "criticality": "High",
+      "discovery_method": "api_probe",
+      "status_code": 404,
+      "api_endpoint": "https://api.zoom.us/v2/",
+      "status": "unreachable",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    },
+    "Citrix": {
+      "category": "Distribution",
+      "users": [
+        "Distribution"
+      ],
+      "criticality": "Low",
+      "discovery_method": "api_probe",
+      "status_code": 200,
+      "api_endpoint": "https://graph.microsoft.com/v1.0/",
+      "status": "active",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    },
+    "AWS EFS": {
+      "category": "Research",
+      "users": [
+        "Portfolio Management"
+      ],
+      "criticality": "High",
+      "discovery_method": "manual_inventory",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    },
+    "Microsoft 365": {
+      "category": "Research",
+      "users": [
+        "Portfolio Management"
+      ],
+      "criticality": "High",
+      "discovery_method": "manual_inventory",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    },
+    "Zoom": {
+      "category": "Distribution/CS",
+      "users": [
+        "Distribution"
+      ],
+      "criticality": "High",
+      "discovery_method": "manual_inventory",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    },
+    "Redtail": {
+      "category": "CRM",
+      "users": [
+        "Advisors"
+      ],
+      "criticality": "High",
+      "discovery_method": "manual_inventory",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    },
+    "Jump": {
+      "category": "Custodian",
+      "users": [
+        "Advisors"
+      ],
+      "criticality": "High",
+      "discovery_method": "manual_inventory",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    },
+    "Zocks": {
+      "category": "Productivity",
+      "users": [
+        "All"
+      ],
+      "criticality": "Medium",
+      "discovery_method": "manual_inventory",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    },
+    "Addepar": {
+      "category": "Productivity",
+      "users": [
+        "All"
+      ],
+      "criticality": "High",
+      "discovery_method": "manual_inventory",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    },
+    "Canoe": {
+      "category": "Productivity",
+      "users": [
+        "All"
+      ],
+      "criticality": "Medium",
+      "discovery_method": "manual_inventory",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    },
+    "Fidelity": {
+      "category": "Productivity",
+      "users": [
+        "All"
+      ],
+      "criticality": "High",
+      "discovery_method": "manual_inventory",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    },
+    "Wealthscape": {
+      "category": "Productivity",
+      "users": [
+        "All"
+      ],
+      "criticality": "Medium",
+      "discovery_method": "manual_inventory",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    },
+    "DocuSign": {
+      "category": "Productivity",
+      "users": [
+        "All"
+      ],
+      "criticality": "Low",
+      "discovery_method": "manual_inventory",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    },
+    "Global Relay": {
+      "category": "Productivity",
+      "users": [
+        "All"
+      ],
+      "criticality": "High",
+      "discovery_method": "manual_inventory",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    },
+    "microsoft365": {
+      "category": "Email/Productivity",
+      "version": "unknown",
+      "users": [
+        "auto-detected"
+      ],
+      "criticality": "Unknown",
+      "discovery_method": "mx_record",
+      "discovery_details": {
+        "tool": "microsoft365",
+        "provider": "Microsoft 365",
+        "mx_record": "crescentgroveadvisors-com.mail.protection.outlook.com.",
+        "category": "Email/Productivity",
+        "discovery_method": "mx_record"
+      },
+      "provider": "Microsoft 365",
+      "last_discovery": "2025-09-18T15:14:58.563999"
+    }
+  },
+  "integrations": [
+    {
+      "source_tool": "Venn",
+      "target_tool": "Citrix",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Venn",
+      "target_tool": "AWS EFS",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Venn",
+      "target_tool": "Microsoft 365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Venn",
+      "target_tool": "Zoom",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Venn",
+      "target_tool": "Redtail",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Venn",
+      "target_tool": "Jump",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Venn",
+      "target_tool": "Zocks",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Venn",
+      "target_tool": "Addepar",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Venn",
+      "target_tool": "Canoe",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Venn",
+      "target_tool": "Fidelity",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Venn",
+      "target_tool": "Wealthscape",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Venn",
+      "target_tool": "DocuSign",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Venn",
+      "target_tool": "Global Relay",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Venn",
+      "target_tool": "microsoft365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Citrix",
+      "target_tool": "AWS EFS",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Citrix",
+      "target_tool": "Microsoft 365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Citrix",
+      "target_tool": "Zoom",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Citrix",
+      "target_tool": "Redtail",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.576873"
+    },
+    {
+      "source_tool": "Citrix",
+      "target_tool": "Jump",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.592593"
+    },
+    {
+      "source_tool": "Citrix",
+      "target_tool": "Zocks",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.593402"
+    },
+    {
+      "source_tool": "Citrix",
+      "target_tool": "Addepar",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.595313"
+    },
+    {
+      "source_tool": "Citrix",
+      "target_tool": "Canoe",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.596506"
+    },
+    {
+      "source_tool": "Citrix",
+      "target_tool": "Fidelity",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.598531"
+    },
+    {
+      "source_tool": "Citrix",
+      "target_tool": "Wealthscape",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.598531"
+    },
+    {
+      "source_tool": "Citrix",
+      "target_tool": "DocuSign",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.599774"
+    },
+    {
+      "source_tool": "Citrix",
+      "target_tool": "Global Relay",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.600775"
+    },
+    {
+      "source_tool": "Citrix",
+      "target_tool": "microsoft365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.600775"
+    },
+    {
+      "source_tool": "AWS EFS",
+      "target_tool": "Microsoft 365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.601772"
+    },
+    {
+      "source_tool": "AWS EFS",
+      "target_tool": "Zoom",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.601772"
+    },
+    {
+      "source_tool": "AWS EFS",
+      "target_tool": "Redtail",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.601772"
+    },
+    {
+      "source_tool": "AWS EFS",
+      "target_tool": "Jump",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.603219"
+    },
+    {
+      "source_tool": "AWS EFS",
+      "target_tool": "Zocks",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.603219"
+    },
+    {
+      "source_tool": "AWS EFS",
+      "target_tool": "Addepar",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.604269"
+    },
+    {
+      "source_tool": "AWS EFS",
+      "target_tool": "Canoe",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.604269"
+    },
+    {
+      "source_tool": "AWS EFS",
+      "target_tool": "Fidelity",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.605318"
+    },
+    {
+      "source_tool": "AWS EFS",
+      "target_tool": "Wealthscape",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.605318"
+    },
+    {
+      "source_tool": "AWS EFS",
+      "target_tool": "DocuSign",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.606480"
+    },
+    {
+      "source_tool": "AWS EFS",
+      "target_tool": "Global Relay",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.607478"
+    },
+    {
+      "source_tool": "AWS EFS",
+      "target_tool": "microsoft365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.607478"
+    },
+    {
+      "source_tool": "Microsoft 365",
+      "target_tool": "Zoom",
+      "status": "IntegrationStatus.MISSING",
+      "integration_type": "IntegrationType.CALENDAR_SYNC",
+      "health_score": 0,
+      "business_criticality": "high",
+      "issues_found": [
+        "Expected integration not found"
+      ],
+      "recommendations": [
+        "Implement calendar_sync integration",
+        "Implement calendar_sync integration between Microsoft 365 and Zoom",
+        "Expected business value: Improved bidirectional data flow",
+        "Prevent common issues: calendar sync failures, authentication expiry, timezone conflicts",
+        "HIGH PRIORITY: Critical business integration needs immediate attention"
+      ],
+      "assessment_timestamp": "2025-09-18T15:14:58.607478"
+    },
+    {
+      "source_tool": "Microsoft 365",
+      "target_tool": "Redtail",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.608826"
+    },
+    {
+      "source_tool": "Microsoft 365",
+      "target_tool": "Jump",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.609830"
+    },
+    {
+      "source_tool": "Microsoft 365",
+      "target_tool": "Zocks",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.609830"
+    },
+    {
+      "source_tool": "Microsoft 365",
+      "target_tool": "Addepar",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.610828"
+    },
+    {
+      "source_tool": "Microsoft 365",
+      "target_tool": "Canoe",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.612097"
+    },
+    {
+      "source_tool": "Microsoft 365",
+      "target_tool": "Fidelity",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.612721"
+    },
+    {
+      "source_tool": "Microsoft 365",
+      "target_tool": "Wealthscape",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.613917"
+    },
+    {
+      "source_tool": "Microsoft 365",
+      "target_tool": "DocuSign",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.615040"
+    },
+    {
+      "source_tool": "Microsoft 365",
+      "target_tool": "Global Relay",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.615040"
+    },
+    {
+      "source_tool": "Microsoft 365",
+      "target_tool": "microsoft365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.616082"
+    },
+    {
+      "source_tool": "Zoom",
+      "target_tool": "Redtail",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.617085"
+    },
+    {
+      "source_tool": "Zoom",
+      "target_tool": "Jump",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.617085"
+    },
+    {
+      "source_tool": "Zoom",
+      "target_tool": "Zocks",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.618139"
+    },
+    {
+      "source_tool": "Zoom",
+      "target_tool": "Addepar",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.618139"
+    },
+    {
+      "source_tool": "Zoom",
+      "target_tool": "Canoe",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.619271"
+    },
+    {
+      "source_tool": "Zoom",
+      "target_tool": "Fidelity",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.619271"
+    },
+    {
+      "source_tool": "Zoom",
+      "target_tool": "Wealthscape",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.620289"
+    },
+    {
+      "source_tool": "Zoom",
+      "target_tool": "DocuSign",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.620289"
+    },
+    {
+      "source_tool": "Zoom",
+      "target_tool": "Global Relay",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.621318"
+    },
+    {
+      "source_tool": "Zoom",
+      "target_tool": "microsoft365",
+      "status": "IntegrationStatus.MISSING",
+      "integration_type": "IntegrationType.CALENDAR_SYNC",
+      "health_score": 0,
+      "business_criticality": "high",
+      "issues_found": [
+        "Expected integration not found"
+      ],
+      "recommendations": [
+        "Implement calendar_sync integration",
+        "Implement calendar_sync integration between Zoom and microsoft365",
+        "Expected business value: Improved bidirectional data flow",
+        "Prevent common issues: calendar sync failures, authentication expiry, timezone conflicts",
+        "HIGH PRIORITY: Critical business integration needs immediate attention"
+      ],
+      "assessment_timestamp": "2025-09-18T15:14:58.621318"
+    },
+    {
+      "source_tool": "Redtail",
+      "target_tool": "Jump",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.622336"
+    },
+    {
+      "source_tool": "Redtail",
+      "target_tool": "Zocks",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.622336"
+    },
+    {
+      "source_tool": "Redtail",
+      "target_tool": "Addepar",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.623374"
+    },
+    {
+      "source_tool": "Redtail",
+      "target_tool": "Canoe",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.623374"
+    },
+    {
+      "source_tool": "Redtail",
+      "target_tool": "Fidelity",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.623374"
+    },
+    {
+      "source_tool": "Redtail",
+      "target_tool": "Wealthscape",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.624395"
+    },
+    {
+      "source_tool": "Redtail",
+      "target_tool": "DocuSign",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.624395"
+    },
+    {
+      "source_tool": "Redtail",
+      "target_tool": "Global Relay",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.625405"
+    },
+    {
+      "source_tool": "Redtail",
+      "target_tool": "microsoft365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.626567"
+    },
+    {
+      "source_tool": "Jump",
+      "target_tool": "Zocks",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.626567"
+    },
+    {
+      "source_tool": "Jump",
+      "target_tool": "Addepar",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.627572"
+    },
+    {
+      "source_tool": "Jump",
+      "target_tool": "Canoe",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.627572"
+    },
+    {
+      "source_tool": "Jump",
+      "target_tool": "Fidelity",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.629076"
+    },
+    {
+      "source_tool": "Jump",
+      "target_tool": "Wealthscape",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.629076"
+    },
+    {
+      "source_tool": "Jump",
+      "target_tool": "DocuSign",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.630305"
+    },
+    {
+      "source_tool": "Jump",
+      "target_tool": "Global Relay",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.631499"
+    },
+    {
+      "source_tool": "Jump",
+      "target_tool": "microsoft365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.632532"
+    },
+    {
+      "source_tool": "Zocks",
+      "target_tool": "Addepar",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.632532"
+    },
+    {
+      "source_tool": "Zocks",
+      "target_tool": "Canoe",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.633862"
+    },
+    {
+      "source_tool": "Zocks",
+      "target_tool": "Fidelity",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.633862"
+    },
+    {
+      "source_tool": "Zocks",
+      "target_tool": "Wealthscape",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.634868"
+    },
+    {
+      "source_tool": "Zocks",
+      "target_tool": "DocuSign",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.634868"
+    },
+    {
+      "source_tool": "Zocks",
+      "target_tool": "Global Relay",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.635911"
+    },
+    {
+      "source_tool": "Zocks",
+      "target_tool": "microsoft365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.635911"
+    },
+    {
+      "source_tool": "Addepar",
+      "target_tool": "Canoe",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.637041"
+    },
+    {
+      "source_tool": "Addepar",
+      "target_tool": "Fidelity",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.637041"
+    },
+    {
+      "source_tool": "Addepar",
+      "target_tool": "Wealthscape",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.638544"
+    },
+    {
+      "source_tool": "Addepar",
+      "target_tool": "DocuSign",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.638544"
+    },
+    {
+      "source_tool": "Addepar",
+      "target_tool": "Global Relay",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.639548"
+    },
+    {
+      "source_tool": "Addepar",
+      "target_tool": "microsoft365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.640621"
+    },
+    {
+      "source_tool": "Canoe",
+      "target_tool": "Fidelity",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.640621"
+    },
+    {
+      "source_tool": "Canoe",
+      "target_tool": "Wealthscape",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.641645"
+    },
+    {
+      "source_tool": "Canoe",
+      "target_tool": "DocuSign",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.641645"
+    },
+    {
+      "source_tool": "Canoe",
+      "target_tool": "Global Relay",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.642651"
+    },
+    {
+      "source_tool": "Canoe",
+      "target_tool": "microsoft365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.642651"
+    },
+    {
+      "source_tool": "Fidelity",
+      "target_tool": "Wealthscape",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.643660"
+    },
+    {
+      "source_tool": "Fidelity",
+      "target_tool": "DocuSign",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.643660"
+    },
+    {
+      "source_tool": "Fidelity",
+      "target_tool": "Global Relay",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.644666"
+    },
+    {
+      "source_tool": "Fidelity",
+      "target_tool": "microsoft365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.645919"
+    },
+    {
+      "source_tool": "Wealthscape",
+      "target_tool": "DocuSign",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.645919"
+    },
+    {
+      "source_tool": "Wealthscape",
+      "target_tool": "Global Relay",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.647000"
+    },
+    {
+      "source_tool": "Wealthscape",
+      "target_tool": "microsoft365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.647000"
+    },
+    {
+      "source_tool": "DocuSign",
+      "target_tool": "Global Relay",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.647000"
+    },
+    {
+      "source_tool": "DocuSign",
+      "target_tool": "microsoft365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.647000"
+    },
+    {
+      "source_tool": "Global Relay",
+      "target_tool": "microsoft365",
+      "status": "IntegrationStatus.UNKNOWN",
+      "integration_type": "IntegrationType.UNKNOWN",
+      "health_score": 30,
+      "business_criticality": "unknown",
+      "issues_found": [
+        "No integration pattern defined"
+      ],
+      "recommendations": [],
+      "assessment_timestamp": "2025-09-18T15:14:58.651158"
+    }
+  ],
+  "automation_opportunities": [],
+  "client_domain": "crescentgroveadvisors.com",
+  "stakeholder_contacts": [],
+  "created_at": "2025-09-18T15:14:57.945910",
+  "updated_at": "2025-09-18T15:14:59.630432"
+}

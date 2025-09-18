@@ -1,0 +1,11 @@
+{
+  "cached_at": "2025-09-18T14:52:47.603809",
+  "data": {
+    "FactSet": {
+      "status_code": 200,
+      "discovery_method": "api_probe",
+      "api_endpoint": "https://graph.microsoft.com/v1.0/",
+      "status": "active"
+    }
+  }
+}

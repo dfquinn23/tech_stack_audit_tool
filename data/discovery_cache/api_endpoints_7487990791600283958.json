@@ -1,0 +1,17 @@
+{
+  "cached_at": "2025-09-18T14:11:01.661401",
+  "data": {
+    "Advent Axys": {
+      "status_code": 404,
+      "discovery_method": "api_probe",
+      "api_endpoint": "https://api.zoom.us/v2/",
+      "status": "unreachable"
+    },
+    "CSSI": {
+      "status_code": 404,
+      "discovery_method": "api_probe",
+      "api_endpoint": "https://www.googleapis.com/",
+      "status": "unreachable"
+    }
+  }
+}

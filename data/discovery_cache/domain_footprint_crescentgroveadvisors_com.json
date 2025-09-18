@@ -1,0 +1,12 @@
+{
+  "cached_at": "2025-09-18T14:27:25.904772",
+  "data": {
+    "email": {
+      "tool": "microsoft365",
+      "provider": "Microsoft 365",
+      "mx_record": "crescentgroveadvisors-com.mail.protection.outlook.com.",
+      "category": "Email/Productivity",
+      "discovery_method": "mx_record"
+    }
+  }
+}

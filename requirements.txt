@@ -12,3 +12,5 @@ asyncio-throttle>=1.0.2
 # Optional for enhanced API integrations
 requests>=2.31.0
 urllib3>=2.0.0
+
+streamlit>=1.28.0
