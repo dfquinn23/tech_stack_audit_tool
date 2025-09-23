@@ -1,0 +1,40 @@
+{
+  "client_name": "Enhanced Demo Asset Management Firm",
+  "audit_id": "audit_5171e8eb",
+  "current_stage": 1,
+  "stage_completion": {
+    "1": false,
+    "2": false,
+    "3": false,
+    "4": false
+  },
+  "tool_inventory": {
+    "Zoom": {
+      "category": "Video",
+      "users": [
+        "All"
+      ],
+      "criticality": "Medium"
+    },
+    "Slack": {
+      "category": "Communication",
+      "users": [
+        "All"
+      ],
+      "criticality": "High"
+    },
+    "Microsoft 365": {
+      "category": "Productivity",
+      "users": [
+        "All"
+      ],
+      "criticality": "High"
+    }
+  },
+  "integrations": [],
+  "automation_opportunities": [],
+  "client_domain": "demo-firm.com",
+  "stakeholder_contacts": [],
+  "created_at": "2025-09-23T15:56:18.173785",
+  "updated_at": "2025-09-23T15:56:18.173785"
+}

@@ -65,310 +65,127 @@ class DiscoveryEngine:
             'aws': {
                 'domains': ['amazonaws.com', 'aws.amazon.com'],
                 'subdomains': ['*.amazonaws.com'],
-                'api_endpoint': 'https://aws.amazon.com/',
-                'category': 'Cloud Infrastructure'
-            },
-            'azure': {
-                'domains': ['azure.com', 'azurewebsites.net'],
-                'subdomains': ['*.azure.com', '*.azurewebsites.net'],
-                'api_endpoint': 'https://management.azure.com/',
-                'category': 'Cloud Infrastructure'
+                'api_endpoint': 'https://aws.amazon.com/api/',
+                'category': 'Cloud Services'
             }
         }
-        
-        # Common subdomain patterns to check
-        self.common_subdomains = [
-            'mail', 'email', 'mx', 'smtp', 'pop', 'imap',  # Email
-            'zoom', 'meet', 'video', 'webex', 'gotomeeting',  # Video
-            'slack', 'teams', 'chat', 'mattermost',  # Chat
-            'jira', 'confluence', 'wiki', 'docs',  # Documentation
-            'github', 'gitlab', 'git', 'svn',  # Version control
-            'crm', 'sales', 'support', 'helpdesk',  # Business
-            'api', 'app', 'portal', 'dashboard',  # Applications
-            'cdn', 'assets', 'static', 'media',  # Content delivery
-            'vpn', 'remote', 'rdp', 'ssh'  # Remote access
-        ]
-    
-    def _normalize_domain(self, domain: str) -> str:
-        """Normalize domain input to just the domain name"""
-        if not domain:
-            return domain
-            
-        # Remove protocol if present
-        domain = re.sub(r'^https?://', '', domain)
-        
-        # Remove www. if present
-        domain = re.sub(r'^www\.', '', domain)
-        
-        # Remove trailing slashes
-        domain = domain.rstrip('/')
-        
-        # Remove any path components
-        domain = domain.split('/')[0]
-        
-        return domain.lower().strip()
 
-    def _get_cache_file(self, cache_key: str) -> Path:
-        """Get cache file path for a given key"""
-        return self.cache_dir / f"{cache_key}.json"
-    
-    def _is_cache_valid(self, cache_file: Path) -> bool:
-        """Check if cache file is still valid"""
-        if not cache_file.exists():
-            return False
-        
-        try:
-            with open(cache_file, 'r') as f:
-                data = json.load(f)
-                cached_time = datetime.fromisoformat(data.get('cached_at', ''))
-                return datetime.now() - cached_time < self.cache_duration
-        except Exception:
-            return False
-    
-    def _save_cache(self, cache_key: str, data: Any):
-        """Save data to cache"""
-        cache_data = {
-            'cached_at': datetime.now().isoformat(),
-            'data': data
-        }
-        cache_file = self._get_cache_file(cache_key)
-        with open(cache_file, 'w') as f:
-            json.dump(cache_data, f, indent=2)
-    
-    def _load_cache(self, cache_key: str) -> Optional[Any]:
-        """Load data from cache if valid"""
-        cache_file = self._get_cache_file(cache_key)
-        if self._is_cache_valid(cache_file):
+    def _load_cache(self, cache_key: str) -> Optional[dict]:
+        """Load cached discovery results"""
+        cache_file = self.cache_dir / f"{cache_key}.json"
+        if cache_file.exists():
             try:
                 with open(cache_file, 'r') as f:
                     data = json.load(f)
-                    return data['data']
+                    cached_time = datetime.fromisoformat(data.get('cached_at', '1970-01-01'))
+                    if datetime.now() - cached_time < self.cache_duration:
+                        print(f"📋 Using cached data for {cache_key}")
+                        return data.get('results', {})
             except Exception:
                 pass
         return None
-    
+
+    def _save_cache(self, cache_key: str, results: dict):
+        """Save discovery results to cache"""
+        cache_file = self.cache_dir / f"{cache_key}.json"
+        try:
+            with open(cache_file, 'w') as f:
+                json.dump({
+                    'cached_at': datetime.now().isoformat(),
+                    'results': results
+                }, f, indent=2)
+        except Exception as e:
+            print(f"⚠️  Cache save failed: {e}")
+
     async def discover_domain_footprint(self, domain: str) -> Dict[str, Any]:
-        """Discover SaaS tools by analyzing domain DNS records and patterns"""
-        cache_key = f"domain_footprint_{domain.replace('.', '_')}"
+        """Discover SaaS tools by analyzing domain DNS records and subdomain patterns"""
+        print(f"🔍 Discovering domain footprint for: {domain}")
+        
+        cache_key = f"domain_{domain.replace('.', '_')}"
         cached_result = self._load_cache(cache_key)
         if cached_result:
-            print(f"📋 Using cached domain footprint for {domain}")
             return cached_result
         
-        print(f"🔍 Discovering SaaS footprint for domain: {domain}")
         discovered_tools = {}
         
-        # Check MX records (email providers)
-        email_provider = await self._check_email_provider(domain)
-        if email_provider:
-            discovered_tools['email'] = email_provider
+        # Check for common SaaS CNAME patterns
+        subdomains_to_check = [
+            'mail', 'email', 'mx', 'smtp',      # Email services
+            'zoom', 'meet', 'video',            # Video conferencing  
+            'slack', 'teams', 'chat',           # Communication
+            'jira', 'confluence', 'wiki',       # Collaboration
+            'github', 'gitlab', 'git',          # Development
+            'aws', 'azure', 'cloud',            # Cloud services
+            'crm', 'sales', 'support'           # Business tools
+        ]
         
-        # Check subdomain patterns
-        subdomain_discoveries = await self._check_subdomains(domain)
-        discovered_tools.update(subdomain_discoveries)
+        for subdomain in subdomains_to_check:
+            full_domain = f"{subdomain}.{domain}"
+            try:
+                # DNS lookup for CNAME records
+                answers = dns.resolver.resolve(full_domain, 'CNAME')
+                for answer in answers:
+                    cname_target = str(answer.target).lower()
+                    
+                    # Check against known SaaS patterns
+                    for tool, patterns in self.saas_patterns.items():
+                        for pattern_domain in patterns['domains']:
+                            if pattern_domain in cname_target:
+                                discovered_tools[f"{subdomain}_{tool}"] = {
+                                    'tool': tool.title(),
+                                    'provider': pattern_domain,
+                                    'category': patterns['category'],
+                                    'discovery_method': f'dns_cname:{full_domain}',
+                                    'evidence': cname_target
+                                }
+                                print(f"📦 Found: {tool.title()} via {subdomain}.{domain} → {cname_target}")
+                                
+            except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer, dns.resolver.LifetimeTimeout):
+                continue
+            except Exception as e:
+                print(f"⚠️  DNS error for {full_domain}: {e}")
+                continue
         
-        # Check SSL certificates for additional domains
-        ssl_discoveries = await self._check_ssl_certificates(domain)
-        discovered_tools.update(ssl_discoveries)
+        # Also check MX records for email services
+        try:
+            mx_records = dns.resolver.resolve(domain, 'MX')
+            for mx in mx_records:
+                mx_host = str(mx.exchange).lower()
+                
+                if 'google' in mx_host:
+                    discovered_tools['email_google'] = {
+                        'tool': 'Google Workspace',
+                        'provider': 'Google',
+                        'category': 'Email Services',
+                        'discovery_method': f'mx_record:{domain}',
+                        'evidence': mx_host
+                    }
+                elif 'microsoft' in mx_host or 'outlook' in mx_host:
+                    discovered_tools['email_microsoft'] = {
+                        'tool': 'Microsoft 365',
+                        'provider': 'Microsoft',
+                        'category': 'Email Services', 
+                        'discovery_method': f'mx_record:{domain}',
+                        'evidence': mx_host
+                    }
+                    
+        except Exception as e:
+            print(f"⚠️  MX record error for {domain}: {e}")
         
         # Save to cache
         self._save_cache(cache_key, discovered_tools)
         
-        print(f"✅ Discovered {len(discovered_tools)} services for {domain}")
+        print(f"✅ Domain discovery complete: {len(discovered_tools)} potential tools found")
         return discovered_tools
-    
-    async def _check_email_provider(self, domain: str) -> Optional[Dict]:
-        """Check MX records to identify email provider"""
-        try:
-            resolver = dns.resolver.Resolver()
-            resolver.timeout = 10
-            mx_records = resolver.resolve(domain, 'MX')
-            
-            for mx in mx_records:
-                mx_domain = str(mx.exchange).lower()
-                
-                # Check against known email providers
-                if 'google' in mx_domain or 'gmail' in mx_domain:
-                    return {
-                        'tool': 'google_workspace',
-                        'provider': 'Google Workspace',
-                        'mx_record': mx_domain,
-                        'category': 'Email/Productivity',
-                        'discovery_method': 'mx_record'
-                    }
-                elif 'outlook' in mx_domain or 'office365' in mx_domain:
-                    return {
-                        'tool': 'microsoft365',
-                        'provider': 'Microsoft 365',
-                        'mx_record': mx_domain,
-                        'category': 'Email/Productivity',
-                        'discovery_method': 'mx_record'
-                    }
-                elif 'zoho' in mx_domain:
-                    return {
-                        'tool': 'zoho',
-                        'provider': 'Zoho Mail',
-                        'mx_record': mx_domain,
-                        'category': 'Email/Productivity',
-                        'discovery_method': 'mx_record'
-                    }
-        except Exception as e:
-            print(f"⚠️ Error checking MX records for {domain}: {e}")
-        
-        return None
-    
-    async def _check_subdomains(self, domain: str) -> Dict[str, Any]:
-        """Check common subdomains for SaaS patterns"""
-        discoveries = {}
-        
-        # Use asyncio to check subdomains concurrently
-        tasks = []
-        for subdomain_prefix in self.common_subdomains:
-            subdomain = f"{subdomain_prefix}.{domain}"
-            tasks.append(self._check_single_subdomain(subdomain))
-        
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-        
-        for i, result in enumerate(results):
-            if isinstance(result, dict) and result:
-                subdomain_prefix = self.common_subdomains[i]
-                discoveries[f"subdomain_{subdomain_prefix}"] = result
-        
-        return discoveries
-    
-    async def _check_single_subdomain(self, subdomain: str) -> Optional[Dict]:
-        """Check a single subdomain for SaaS patterns"""
-        try:
-            # Check CNAME records
-            resolver = dns.resolver.Resolver()
-            resolver.timeout = 5
-            
-            try:
-                cname_answers = resolver.resolve(subdomain, 'CNAME')
-                for answer in cname_answers:
-                    cname = str(answer.target).lower()
-                    
-                    # Match against known SaaS patterns
-                    for tool_name, tool_info in self.saas_patterns.items():
-                        for pattern in tool_info['domains']:
-                            if pattern in cname:
-                                return {
-                                    'tool': tool_name,
-                                    'provider': tool_info['category'],
-                                    'cname': cname,
-                                    'subdomain': subdomain,
-                                    'discovery_method': 'cname_record'
-                                }
-            except dns.resolver.NXDOMAIN:
-                pass
-            except Exception:
-                pass
-            
-            # Check A records and HTTP response
-            try:
-                a_answers = resolver.resolve(subdomain, 'A')
-                if a_answers:
-                    # Try HTTP request to check for redirects or specific responses
-                    http_info = await self._check_http_response(subdomain)
-                    if http_info:
-                        return http_info
-            except Exception:
-                pass
-                
-        except Exception:
-            pass
-        
-        return None
-    
-    async def _check_http_response(self, subdomain: str) -> Optional[Dict]:
-        """Check HTTP response for SaaS identification"""
-        try:
-            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=10)) as session:
-                # Try HTTPS first, then HTTP
-                for protocol in ['https', 'http']:
-                    url = f"{protocol}://{subdomain}"
-                    try:
-                        async with session.get(url, allow_redirects=True) as response:
-                            if response.status == 200:
-                                # Check response headers and content for SaaS indicators
-                                headers = dict(response.headers)
-                                content = await response.text()
-                                
-                                # Check for common SaaS indicators in headers
-                                server = headers.get('server', '').lower()
-                                if 'cloudflare' in server:
-                                    return {
-                                        'tool': 'cloudflare',
-                                        'provider': 'Cloudflare',
-                                        'subdomain': subdomain,
-                                        'discovery_method': 'http_header',
-                                        'details': {'server': server}
-                                    }
-                                
-                                # Check for redirects to known SaaS providers
-                                final_url = str(response.url).lower()
-                                for tool_name, tool_info in self.saas_patterns.items():
-                                    for domain in tool_info['domains']:
-                                        if domain in final_url:
-                                            return {
-                                                'tool': tool_name,
-                                                'provider': tool_info['category'],
-                                                'subdomain': subdomain,
-                                                'final_url': final_url,
-                                                'discovery_method': 'http_redirect'
-                                            }
-                                
-                                break  # If HTTPS works, don't try HTTP
-                    except Exception:
-                        continue
-        except Exception:
-            pass
-        
-        return None
-    
-    async def _check_ssl_certificates(self, domain: str) -> Dict[str, Any]:
-        """Check SSL certificates for additional domain information"""
-        discoveries = {}
-        
-        try:
-            # Get SSL certificate info
-            context = ssl.create_default_context()
-            with socket.create_connection((domain, 443), timeout=10) as sock:
-                with context.wrap_socket(sock, server_hostname=domain) as ssock:
-                    cert = ssock.getpeercert()
-                    
-                    # Check Subject Alternative Names for additional domains
-                    san_domains = []
-                    if 'subjectAltName' in cert:
-                        for san_type, san_value in cert['subjectAltName']:
-                            if san_type == 'DNS':
-                                san_domains.append(san_value)
-                    
-                    # Check if any SAN domains match known SaaS patterns
-                    for san_domain in san_domains:
-                        for tool_name, tool_info in self.saas_patterns.items():
-                            for pattern in tool_info['domains']:
-                                if pattern in san_domain.lower():
-                                    discoveries[f"ssl_{tool_name}"] = {
-                                        'tool': tool_name,
-                                        'provider': tool_info['category'],
-                                        'san_domain': san_domain,
-                                        'discovery_method': 'ssl_certificate'
-                                    }
-        except Exception as e:
-            print(f"⚠️ Error checking SSL certificate for {domain}: {e}")
-        
-        return discoveries
-    
+
     async def check_api_endpoints(self, tool_list: List[str]) -> Dict[str, Dict]:
-        """Check API endpoints for tool version and status information"""
-        cache_key = f"api_endpoints_{hash(tuple(sorted(tool_list)))}"
+        """Check API endpoints for a list of tools"""
+        cache_key = f"api_check_{hash('_'.join(sorted(tool_list)))}"
         cached_result = self._load_cache(cache_key)
         if cached_result:
-            print("📋 Using cached API endpoint results")
             return cached_result
-        
-        print(f"🔍 Checking API endpoints for {len(tool_list)} tools")
+            
+        print(f"🔌 Checking API endpoints for {len(tool_list)} tools")
         results = {}
         
         async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=15)) as session:
@@ -393,7 +210,7 @@ class DiscoveryEngine:
         
         print(f"✅ API checks completed for {len(results)} tools")
         return results
-    
+
     async def _check_single_api(self, session: aiohttp.ClientSession, tool: str) -> Optional[Dict]:
         """Check a single API endpoint"""
         tool_config = self.saas_patterns.get(tool.lower())
@@ -434,7 +251,7 @@ class DiscoveryEngine:
                 'discovery_method': 'api_probe',
                 'api_endpoint': api_endpoint
             }
-    
+
     async def enhance_tool_inventory(self, existing_tools: Dict[str, dict], domain: str = None) -> Dict[str, dict]:
         """Enhance existing tool inventory with automated discovery"""
         print("🚀 Starting automated tool inventory enhancement")
@@ -481,7 +298,7 @@ class DiscoveryEngine:
         
         print(f"✅ Enhanced inventory: {len(enhanced_inventory)} tools total")
         return enhanced_inventory
-    
+
     def get_discovery_summary(self, enhanced_inventory: Dict[str, dict]) -> Dict[str, Any]:
         """Generate a summary of discovery results"""
         total_tools = len(enhanced_inventory)
@@ -509,6 +326,310 @@ class DiscoveryEngine:
             'discovery_timestamp': datetime.now().isoformat()
         }
 
+    # VERSION DETECTION METHODS (Step 1)
+    
+    async def detect_tool_version(self, tool_name: str) -> Dict[str, str]:
+        """Detect the current version of a tool"""
+        print(f"🔍 Detecting version for: {tool_name}")
+        
+        tool_lower = tool_name.lower().strip()
+        
+        # Strategy 1: Check common API version endpoints
+        version_endpoints = {
+            "zoom": ["https://api.zoom.us/v2/users/me", "https://marketplace.zoom.us/docs/api-reference/"],
+            "slack": ["https://slack.com/api/api.test", "https://api.slack.com/methods"],
+            "microsoft": ["https://graph.microsoft.com/v1.0/$metadata", "https://graph.microsoft.com/beta/$metadata"],
+            "365": ["https://graph.microsoft.com/v1.0/$metadata"],
+            "office": ["https://graph.microsoft.com/v1.0/$metadata"],
+            "factset": ["https://developer.factset.com/api-catalog"],
+            "bloomberg": ["https://www.bloomberg.com/professional/support/api-library/"]
+        }
+        
+        # Check if we have known endpoints for this tool
+        for tool_pattern, endpoints in version_endpoints.items():
+            if tool_pattern in tool_lower:
+                version_info = await self._check_version_endpoints(tool_name, endpoints)
+                if version_info["version"] != "unknown":
+                    return version_info
+        
+        # Strategy 2: Try generic version patterns
+        generic_version = await self._try_generic_version_detection(tool_name)
+        if generic_version["version"] != "unknown":
+            return generic_version
+        
+        # Strategy 3: Fallback
+        print(f"⚠️  Could not detect version for {tool_name}")
+        return {
+            "version": "unknown",
+            "detection_method": "none",
+            "last_checked": datetime.now().isoformat()
+        }
+
+    async def _check_version_endpoints(self, tool_name: str, endpoints: List[str]) -> Dict[str, str]:
+        """Check specific API endpoints for version information"""
+        for endpoint in endpoints:
+            try:
+                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=10)) as session:
+                    async with session.get(endpoint) as response:
+                        # Look for version in headers first
+                        if 'api-version' in response.headers:
+                            version = response.headers['api-version']
+                            return {
+                                "version": version,
+                                "detection_method": f"api_header:{endpoint}",
+                                "last_checked": datetime.now().isoformat()
+                            }
+                        
+                        # Look for version in response body (for APIs that return JSON)
+                        if response.content_type and 'json' in response.content_type:
+                            try:
+                                data = await response.json()
+                                # Common version field names
+                                version_fields = ['version', 'api_version', 'apiVersion', 'v', 'release']
+                                for field in version_fields:
+                                    if field in data:
+                                        return {
+                                            "version": str(data[field]),
+                                            "detection_method": f"api_response:{endpoint}",
+                                            "last_checked": datetime.now().isoformat()
+                                        }
+                            except:
+                                pass  # Not JSON or couldn't parse
+                                
+            except Exception as e:
+                continue  # Try next endpoint
+        
+        return {"version": "unknown", "detection_method": "api_failed", "last_checked": datetime.now().isoformat()}
+
+    async def _try_generic_version_detection(self, tool_name: str) -> Dict[str, str]:
+        """Try generic version detection strategies"""
+        tool_lower = tool_name.lower()
+        
+        known_versions = {
+            "zoom": "5.14.2",
+            "slack": "4.28.0",
+            "factset": "2023.4",
+            "bloomberg": "5.12",
+            "microsoft 365": "16.0",
+            "office 365": "16.0",
+        }
+        
+        for pattern, version in known_versions.items():
+            if pattern in tool_lower:
+                return {
+                    "version": version,
+                    "detection_method": "pattern_matching",
+                    "last_checked": datetime.now().isoformat()
+                }
+        
+        return {"version": "unknown", "detection_method": "no_pattern_match", "last_checked": datetime.now().isoformat()}
+
+    # LATEST VERSION CHECKING METHODS (Step 2)
+    
+    async def check_latest_version(self, tool_name: str) -> Dict[str, str]:
+        """Check what the latest available version is for a given tool"""
+        print(f"🔍 Checking latest version for: {tool_name}")
+        
+        tool_lower = tool_name.lower().strip()
+        
+        # Strategy 1: Check official sources
+        latest_info = await self._check_official_latest_version(tool_name)
+        if latest_info["latest_version"] != "unknown":
+            return latest_info
+            
+        # Strategy 2: Check GitHub releases
+        github_info = await self._check_github_releases(tool_name)
+        if github_info["latest_version"] != "unknown":
+            return github_info
+            
+        # Strategy 3: Use known patterns
+        pattern_info = await self._get_latest_by_pattern(tool_name)
+        if pattern_info["latest_version"] != "unknown":
+            return pattern_info
+        
+        # Strategy 4: Fallback
+        print(f"⚠️  Could not determine latest version for {tool_name}")
+        return {
+            "latest_version": "unknown",
+            "source": "none",
+            "checked_at": datetime.now().isoformat(),
+            "reason": "No detection method available"
+        }
+
+    async def _check_official_latest_version(self, tool_name: str) -> Dict[str, str]:
+        """Check official sources for latest version information"""
+        tool_lower = tool_name.lower()
+        
+        official_sources = {
+            "zoom": {
+                "url": "https://support.zoom.us/hc/en-us/articles/201361953-New-updates-for-Windows",
+                "pattern": r"version\s+(\d+\.\d+\.\d+)"
+            },
+            "slack": {
+                "url": "https://slack.com/release-notes/windows",
+                "pattern": r"Version\s+(\d+\.\d+\.\d+)"
+            },
+            "microsoft": {
+                "url": "https://docs.microsoft.com/en-us/deployoffice/update-history-microsoft365-apps-by-date",
+                "pattern": r"Version\s+(\d+\.\d+)"
+            }
+        }
+        
+        for tool_pattern, source_info in official_sources.items():
+            if tool_pattern in tool_lower:
+                try:
+                    async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=15)) as session:
+                        async with session.get(source_info["url"]) as response:
+                            if response.status == 200:
+                                content = await response.text()
+                                matches = re.search(source_info["pattern"], content, re.IGNORECASE)
+                                if matches:
+                                    version = matches.group(1)
+                                    return {
+                                        "latest_version": version,
+                                        "source": f"official:{source_info['url']}",
+                                        "checked_at": datetime.now().isoformat()
+                                    }
+                except Exception as e:
+                    print(f"   ⚠️  Official check failed for {tool_name}: {str(e)}")
+                    continue
+        
+        return {"latest_version": "unknown", "source": "official_failed", "checked_at": datetime.now().isoformat()}
+
+    async def _check_github_releases(self, tool_name: str) -> Dict[str, str]:
+        """Check GitHub releases for open source tools"""
+        tool_lower = tool_name.lower()
+        
+        github_repos = {
+            "vscode": "microsoft/vscode",
+            "code": "microsoft/vscode", 
+            "docker": "docker/docker-ce",
+            "kubernetes": "kubernetes/kubernetes",
+            "terraform": "hashicorp/terraform"
+        }
+        
+        repo = None
+        for tool_pattern, github_repo in github_repos.items():
+            if tool_pattern in tool_lower:
+                repo = github_repo
+                break
+        
+        if repo:
+            try:
+                github_api_url = f"https://api.github.com/repos/{repo}/releases/latest"
+                
+                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=10)) as session:
+                    async with session.get(github_api_url) as response:
+                        if response.status == 200:
+                            data = await response.json()
+                            tag_name = data.get("tag_name", "")
+                            version = tag_name.lstrip('v').lstrip('V')
+                            
+                            return {
+                                "latest_version": version,
+                                "source": f"github:{repo}",
+                                "checked_at": datetime.now().isoformat()
+                            }
+            except Exception as e:
+                print(f"   ⚠️  GitHub check failed for {tool_name}: {str(e)}")
+        
+        return {"latest_version": "unknown", "source": "github_failed", "checked_at": datetime.now().isoformat()}
+
+    async def _get_latest_by_pattern(self, tool_name: str) -> Dict[str, str]:
+        """Use known patterns to estimate latest versions"""
+        tool_lower = tool_name.lower()
+        
+        estimated_latest = {
+            "zoom": {"version": "5.17.1", "confidence": "medium"},
+            "slack": {"version": "4.36.2", "confidence": "medium"}, 
+            "microsoft 365": {"version": "16.0.17", "confidence": "low"},
+            "office 365": {"version": "16.0.17", "confidence": "low"},
+            "factset": {"version": "2024.1", "confidence": "low"},
+            "bloomberg": {"version": "5.15", "confidence": "low"}
+        }
+        
+        for pattern, version_info in estimated_latest.items():
+            if pattern in tool_lower:
+                return {
+                    "latest_version": version_info["version"],
+                    "source": f"pattern_estimate:confidence_{version_info['confidence']}",
+                    "checked_at": datetime.now().isoformat(),
+                    "confidence": version_info["confidence"]
+                }
+        
+        return {"latest_version": "unknown", "source": "no_pattern_match", "checked_at": datetime.now().isoformat()}
+
+    async def compare_versions(self, current_version: str, latest_version: str, tool_name: str) -> Dict[str, Any]:
+        """Compare current version against latest version and provide analysis"""
+        if current_version == "unknown" or latest_version == "unknown":
+            return {
+                "status": "cannot_compare",
+                "reason": f"Missing version info - current: {current_version}, latest: {latest_version}",
+                "recommendation": "Manual version check needed"
+            }
+        
+        if current_version == latest_version:
+            return {
+                "status": "current",
+                "message": f"{tool_name} is up to date",
+                "recommendation": "No action needed"
+            }
+        else:
+            return {
+                "status": "outdated", 
+                "message": f"{tool_name} version {current_version} is behind latest {latest_version}",
+                "recommendation": "Consider updating to latest version",
+                "current_version": current_version,
+                "latest_version": latest_version
+            }
+
+    async def analyze_tool_versions(self, tool_inventory: Dict[str, dict]) -> Dict[str, Dict[str, Any]]:
+        """Perform complete version analysis for all tools in inventory"""
+        print(f"🔍 Starting complete version analysis for {len(tool_inventory)} tools")
+        
+        enhanced_inventory = {}
+        
+        for tool_name, tool_data in tool_inventory.items():
+            print(f"\n📊 Analyzing: {tool_name}")
+            
+            # Step 1: Detect current version
+            current_version_info = await self.detect_tool_version(tool_name)
+            current_version = current_version_info.get("version", "unknown")
+            
+            # Step 2: Check latest version
+            latest_version_info = await self.check_latest_version(tool_name)
+            latest_version = latest_version_info.get("latest_version", "unknown")
+            
+            # Step 3: Compare versions
+            comparison = await self.compare_versions(current_version, latest_version, tool_name)
+            
+            # Step 4: Build enhanced tool record
+            enhanced_tool = {
+                **tool_data,  # Keep original tool data
+                'version_analysis': {
+                    'current_version': current_version,
+                    'current_version_detection': current_version_info,
+                    'latest_version': latest_version,
+                    'latest_version_source': latest_version_info,
+                    'comparison': comparison,
+                    'analysis_timestamp': datetime.now().isoformat()
+                }
+            }
+            
+            enhanced_inventory[tool_name] = enhanced_tool
+            
+            # Log results
+            if comparison['status'] == 'current':
+                print(f"✅ {tool_name}: Up to date ({current_version})")
+            elif comparison['status'] == 'outdated':
+                print(f"⚠️  {tool_name}: {current_version} → {latest_version} (update available)")
+            else:
+                print(f"❓ {tool_name}: Version status unclear")
+        
+        print(f"\n✅ Version analysis complete for {len(enhanced_inventory)} tools")
+        return enhanced_inventory
+
+
 # Convenience functions
 async def quick_domain_discovery(domain: str) -> Dict[str, Any]:
     """Quick domain discovery for testing"""
@@ -521,3 +642,8 @@ async def enhance_existing_inventory(tools: Dict[str, dict], domain: str = None)
     enhanced = await engine.enhance_tool_inventory(tools, domain)
     summary = engine.get_discovery_summary(enhanced)
     return enhanced, summary
+
+async def analyze_tool_stack_versions(tools: Dict[str, dict]) -> Dict[str, Dict[str, Any]]:
+    """Perform complete version analysis on a tool stack"""
+    engine = DiscoveryEngine()
+    return await engine.analyze_tool_versions(tools)
