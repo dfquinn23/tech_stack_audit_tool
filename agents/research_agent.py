@@ -26,7 +26,7 @@ def get_research_agent(llm, tools: list | None = None):
 
 def get_research_task(agent, tool_name: str, seed_entries: list[dict] | None = None, lookback_days: int = 365):
     """
-    seed_entries: optional list of dicts like {"date": "...", "title": "...", "description": "..."} (e.g., from core.changelog_fetcher)
+    seed_entries: optional list of dicts like {"date": "...", "title": "...", "description": "..."} (e.g., core.software_update_researcher)
     lookback_days: guidance to the agent for recency
     """
     seeds_str = ""

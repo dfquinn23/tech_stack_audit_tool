@@ -413,14 +413,7 @@ class DiscoveryEngine:
         """Try generic version detection strategies"""
         tool_lower = tool_name.lower()
 
-        known_versions = {
-            "zoom": "5.14.2",
-            "slack": "4.28.0",
-            "factset": "2023.4",
-            "bloomberg": "5.12",
-            "microsoft 365": "16.0",
-            "office 365": "16.0",
-        }
+        known_versions = {}
 
         for pattern, version in known_versions.items():
             if pattern in tool_lower:
@@ -644,12 +637,12 @@ class DiscoveryEngine:
         return enhanced_inventory
 
     # NEW: FEATURE DETECTION METHOD (Step 1 of Priority 1)
-    
+
     async def detect_recent_automation_features(self, tool_name: str) -> Dict[str, Any]:
         """
         Identify recent automation features added to tools that clients might not know about.
 
-        This focuses on workflow automation, APIs, and integration features added in 
+        This focuses on workflow automation, APIs, and integration features added in
         the last 12-24 months that could provide immediate business value.
 
         Args:
@@ -662,6 +655,10 @@ class DiscoveryEngine:
 
         tool_lower = tool_name.lower().strip()
 
+    recent_features = {
+        "factset": {
+            "features": [
+                # ... existing features ...
         # Recent automation features database (last 12-24 months)
         recent_features = {
             "factset": {
@@ -776,7 +773,7 @@ async def quick_domain_discovery(domain: str) -> Dict[str, Any]:
     return await engine.discover_domain_footprint(domain)
 
 
-async def enhance_existing_inventory(tools: Dict[str, dict], domain: str = None) -> Tuple[Dict[str, dict], Dict[str, Any]]:
+async def enhance_existing_inventory(tools: Dict[str, dict], domain: str=None) -> Tuple[Dict[str, dict], Dict[str, Any]]:
     """Enhance existing tool inventory and return summary"""
     engine = DiscoveryEngine()
     enhanced = await engine.enhance_tool_inventory(tools, domain)
